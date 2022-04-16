@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "719151797669",
+    "project_id": "onthegroundfirebase-62549",
+    "storage_bucket": "onthegroundfirebase-62549.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719151797669:android:e12298050c95b99450c44c",
+        "android_client_info": {
+          "package_name": "com.example.ontheground"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719151797669-oom5v4j5dmtks0hqfq02m00061gcub10.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChHQ7GxCeynhuPE7ocLOy6ZPJ5D_ygvb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719151797669-oom5v4j5dmtks0hqfq02m00061gcub10.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "719151797669-snmba8bequugd93jg6kjfaf22cnsqk72.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ontheground"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
