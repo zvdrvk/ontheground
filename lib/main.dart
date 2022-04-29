@@ -3,9 +3,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import 'auth_service.dart';
 import 'otg_service.dart';
+
+final imageList = [
+  Image.asset('assets/banner.jpg', fit: BoxFit.cover),
+  Image.asset('assets/banner.jpg', fit: BoxFit.cover),
+  Image.asset('assets/banner.jpg', fit: BoxFit.cover),
+];
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
@@ -26,9 +33,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<AuthService>().currentUser();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: user == null ? LoginPage() : HomePage(),
     );
   }
 }
@@ -208,105 +216,319 @@ class _HomePageState extends State<HomePage> {
       builder: (context, otgService, child) {
         return Scaffold(
           appBar: AppBar(
-            title: Text("버킷 리스트"),
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+              ),
+              onPressed: () {},
+            ),
             actions: [
-              TextButton(
-                child: Text(
-                  "로그아웃",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+              IconButton(
+                icon: Icon(
+                  Icons.person_outline,
+                  color: Colors.black,
                 ),
-                onPressed: () {
-                  // 로그아웃
-                  context.read<AuthService>().signOut();
-
-                  // 로그인 페이지로 이동
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
+                onPressed: () {},
               ),
             ],
           ),
-          body: Column(
-            children: [
-              /// 입력창
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    /// 텍스트 입력창
-                    Expanded(
-                      child: TextField(
-                        controller: jobController,
-                        decoration: InputDecoration(
-                          hintText: "하고 싶은 일을 입력해주세요.",
-                        ),
-                      ),
+          body: SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                Container(
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 120.0,
+                      aspectRatio: 16 / 9,
+                      viewportFraction: 0.8,
+                      initialPage: 0,
+                      enableInfiniteScroll: true,
+                      reverse: false,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enlargeCenterPage: true,
+                      scrollDirection: Axis.horizontal,
                     ),
-
-                    /// 추가 버튼
-                    ElevatedButton(
-                      child: Icon(Icons.add),
-                      onPressed: () {
-                        // create bucket
-                        if (jobController.text.isNotEmpty) {
-                          otgService.create(jobController.text, user.uid);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Divider(height: 1),
-
-              /// 버킷 리스트
-              Expanded(
-                child: FutureBuilder<QuerySnapshot>(
-                  future: otgService.read(user.uid),
-                  builder: (context, snapshot) {
-                    final docs = snapshot.data?.docs ?? []; // 문서들 가져오기
-                    if (docs.isEmpty) {
-                      return Center(child: Text("버킷 리스트를 작성해주세요."));
-                    }
-                    return ListView.builder(
-                      itemCount: docs.length,
-                      itemBuilder: (context, index) {
-                        final doc = docs[index];
-                        String job = doc.get('job');
-                        bool isDone = doc.get('isDone');
-                        return ListTile(
-                          title: Text(
-                            job,
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: isDone ? Colors.grey : Colors.black,
-                              decoration: isDone
-                                  ? TextDecoration.lineThrough
-                                  : TextDecoration.none,
+                    items: imageList.map((image) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.symmetric(horizontal: 5.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: image,
                             ),
-                          ),
-                          // 삭제 아이콘 버튼
-                          trailing: IconButton(
-                            icon: Icon(CupertinoIcons.delete),
-                            onPressed: () {
-                              // 삭제 버튼 클릭시
-                              otgService.delete(doc.id);
-                            },
-                          ),
-                          onTap: () {
-                            // 아이템 클릭하여 isDone 업데이트
-                            otgService.update(doc.id, !isDone);
-                          },
-                        );
-                      },
-                    );
-                  },
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('NEW 크루 모집글'),
+                      Container(
+                        height: 224,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Container(
+                              width: 160,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 80,
+                                    color: Colors.grey,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('크루명'),
+                                        Text('모집글 제목'),
+                                        Row(
+                                          children: [
+                                            Text('#해시태그'),
+                                            Text('#해시태그'),
+                                          ],
+                                        ),
+                                        Text('모집중 0/4'),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Container(
+                              width: 160,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 80,
+                                    color: Colors.grey,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('크루명'),
+                                        Text('모집글 제목'),
+                                        Row(
+                                          children: [
+                                            Text('#해시태그'),
+                                            Text('#해시태그'),
+                                          ],
+                                        ),
+                                        Text('모집중 0/4'),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Container(
+                              width: 160,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 80,
+                                    color: Colors.grey,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('크루명'),
+                                        Text('모집글 제목'),
+                                        Row(
+                                          children: [
+                                            Text('#해시태그'),
+                                            Text('#해시태그'),
+                                          ],
+                                        ),
+                                        Text('모집중 0/4'),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('HOT 아티스트'),
+                      Container(
+                        height: 155,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Container(
+                              width: 160,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('포지션'),
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.grey,
+                                        radius: 12,
+                                      ),
+                                      Text('아티스트명'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('#해시태그'),
+                                      Text('#해시태그'),
+                                    ],
+                                  ),
+                                  Text('모집중 0/4'),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Container(
+                              width: 160,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('포지션'),
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.grey,
+                                        radius: 12,
+                                      ),
+                                      Text('아티스트명'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('#해시태그'),
+                                      Text('#해시태그'),
+                                    ],
+                                  ),
+                                  Text('모집중 0/4'),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Container(
+                              width: 160,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('포지션'),
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.grey,
+                                        radius: 12,
+                                      ),
+                                      Text('아티스트명'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('#해시태그'),
+                                      Text('#해시태그'),
+                                    ],
+                                  ),
+                                  Text('모집중 0/4'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
