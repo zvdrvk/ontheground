@@ -614,8 +614,6 @@ class OtgSearchPage extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       children: [
         MainpageBanner(),
-        MainpageCrew(),
-        MainpageArtist(),
       ],
     );
   }
@@ -631,9 +629,7 @@ class OtgCrewPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16.0),
       children: [
-        MainpageBanner(),
         MainpageCrew(),
-        MainpageArtist(),
       ],
     );
   }
@@ -649,8 +645,6 @@ class OtgEtcPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16.0),
       children: [
-        MainpageBanner(),
-        MainpageCrew(),
         MainpageArtist(),
       ],
     );
