@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ontheground/home_page.dart';
@@ -7,11 +9,7 @@ import 'auth_service.dart';
 import 'main_page.dart';
 import 'otg_service.dart';
 
-final imageList = [
-  Image.asset('assets/banner.jpg', fit: BoxFit.cover),
-  Image.asset('assets/banner.jpg', fit: BoxFit.cover),
-  Image.asset('assets/banner.jpg', fit: BoxFit.cover),
-];
+Color onthegroundPrimaryColor = Color(0xff912CCF);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
@@ -34,6 +32,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.read<AuthService>().currentUser();
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Pretendard',
+      ),
       debugShowCheckedModeBanner: false,
       home: user == null ? LoginPage() : HomePage(),
     );

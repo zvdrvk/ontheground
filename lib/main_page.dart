@@ -46,19 +46,32 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              // 작성페이지 이동
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => OtgWritePage()),
-              );
-            },
-            child: const Icon(
-              Icons.add,
-              size: 40,
+          floatingActionButton: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.07),
+                  blurRadius: 10,
+                  offset: Offset(5, 5),
+                  spreadRadius: 1,
+                )
+              ],
             ),
-            backgroundColor: Colors.black,
+            child: FloatingActionButton(
+              onPressed: () {
+                // 작성페이지 이동
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => OtgWritePage()),
+                );
+              },
+              child: const Icon(
+                Icons.add,
+                size: 40,
+              ),
+              backgroundColor: onthegroundPrimaryColor,
+            ),
           ),
           body: SafeArea(
             child: IndexedStack(
