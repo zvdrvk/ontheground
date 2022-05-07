@@ -102,7 +102,10 @@ class _MainpageCrewState extends State<MainpageCrew> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('NEW 크루 모집글'),
+          Text(
+            'NEW 크루 모집글',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
           Container(
             height: 224,
             margin: EdgeInsets.only(top: 16),
@@ -113,65 +116,69 @@ class _MainpageCrewState extends State<MainpageCrew> {
                 final crew = crewContent[index % crewContent.length];
                 final name = crew["name"] ?? "이름";
                 final img = crew["img"] ?? "";
-                return Container(
-                  margin: EdgeInsets.only(right: 8),
-                  width: 160,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      width: 1,
-                      color: const Color(0xffE2E2E2),
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.07),
-                        blurRadius: 10,
-                        offset: Offset(5, 5),
-                        spreadRadius: 1,
-                      )
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          img,
-                          height: 116,
-                          width: double.infinity,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              name,
-                              style: TextStyle(
-                                color: onthegroundPrimaryColor,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text('모집글 제목'),
-                            Row(
-                              children: [
-                                Text('#해시태그'),
-                                Text('#해시태그'),
-                              ],
-                            ),
-                            Text('모집중 0/4'),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                );
+                return CrewCard(img, name);
                 ;
               },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container CrewCard(String img, String name) {
+    return Container(
+      margin: EdgeInsets.only(right: 8),
+      width: 160,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          width: 1,
+          color: const Color(0xffE2E2E2),
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.07),
+            blurRadius: 10,
+            offset: Offset(5, 5),
+            spreadRadius: 1,
+          )
+        ],
+      ),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              img,
+              height: 116,
+              width: double.infinity,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                    color: onthegroundPrimaryColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Text('모집글 제목'),
+                Row(
+                  children: [
+                    Text('#해시태그'),
+                    Text('#해시태그'),
+                  ],
+                ),
+                Text('모집중 0/4'),
+              ],
             ),
           )
         ],
